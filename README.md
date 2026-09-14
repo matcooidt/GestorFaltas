@@ -6,17 +6,17 @@ Aplicación web modular y ligera para el control, seguimiento y gestión del reg
 
 * **Dashboard Dinámico:** Visualización gráfica del estado de asistencia con gráficos circulares y de barras interactivos (integración mediante `Chart.js`).
 * **Control de Umbrales:** Alertas automáticas y avisos por colores según los porcentajes de acumulación de faltas (advertencia y riesgo de pérdida de evaluación continua).
-* **Horario Semanal Interactivo:** Cuadrante horario que permite hacer clic directamente sobre cualquier clase para registrar una falta de forma rápida[cite: 2].
-* **Gestión por Asignaturas:** Despliegue y filtrado detallado de faltas organizadas módulo a módulo[cite: 2].
-* **Persistencia Local:** Almacenamiento seguro de los registros directamente en el navegador del usuario mediante `localStorage`[cite: 2].
-* **Modo Oscuro / Claro:** Cambio de tema integrado con persistencia de preferencias[cite: 2].
-* **Diseño Responsive:** Interfaz completamente adaptable tanto a dispositivos móviles como a escritorios[cite: 2].
+* **Horario Semanal Interactivo:** Cuadrante horario que permite hacer clic directamente sobre cualquier clase para registrar una falta de forma rápida.
+* **Gestión por Asignaturas:** Despliegue y filtrado detallado de faltas organizadas módulo a módulo.
+* **Persistencia Local:** Almacenamiento seguro de los registros directamente en el navegador del usuario mediante `localStorage`.
+* **Modo Oscuro / Claro:** Cambio de tema integrado con persistencia de preferencias.
+* **Diseño Responsive:** Interfaz completamente adaptable tanto a dispositivos móviles como a escritorios.
 
 ## 🛠️ Tecnologías Utilizadas
 
-* **HTML5** y **CSS3** (Variables CSS, Grid, Flexbox y diseño adaptativo)[cite: 2].
-* **JavaScript (Vanilla)** para toda la lógica de control, estado y manipulación del DOM[cite: 2].
-* **Chart.js** para la representación gráfica de los datos de asistencia[cite: 1, 2].
+* **HTML5** y **CSS3** (Variables CSS, Grid, Flexbox y diseño adaptativo).
+* **JavaScript (Vanilla)** para toda la lógica de control, estado y manipulación del DOM.
+* **Chart.js** para la representación gráfica de los datos de asistencia.
 
 ## 📂 Estructura del Proyecto
 
