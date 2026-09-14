@@ -250,6 +250,32 @@ thead th{text-align:left;font-size:.74rem;text-transform:uppercase;letter-spacin
     padding:12px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap;transition:background .15s ease;}
   .sm-row:last-child{border-bottom:none;}
   .sm-row:hover{background:var(--paper-1);}
+/* ---------- AUTH SCREEN ---------- */
+.auth-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--ink-900);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+.auth-screen.hidden {
+  display: none;
+}
+.auth-box {
+  width: 100%;
+  max-width: 360px;
+  background: var(--paper-0);
+}
+/* Ocultar la app por defecto hasta hacer login */
+.app {
+  display: none; 
+}
+.app.visible {
+  display: grid;
+}
   .sm-row-main{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;min-width:0;}
   .sm-date{font-family:var(--mono);font-size:.82rem;color:var(--text-2);min-width:78px;}
   .sm-hours{font-weight:700;font-size:.9rem;}
