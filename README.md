@@ -27,4 +27,4 @@ El proyecto se encuentra refactorizado y dividido en módulos limpios:
  ┣ 📜 index.html         # Estructura principal de la interfaz y vistas
  ┣ 📜 styles.css         # Hoja de estilos y soporte para temas (claro/oscuro)
  ┣ 📜 app.js             # Lógica de la aplicación, estado, eventos y gráficos
- ┗ 📜 chart.min.js       # Librería local Chart.js[cite: 1, 2]
+ ┗ 📜 chart.min.js       # Librería local Chart.js
