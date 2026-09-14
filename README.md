@@ -1,4 +1,4 @@
-# 📚 Cuaderno de Asistencia DAW
+# 📚 Cuaderno de Asistencia 
 
 Aplicación web modular y ligera para el control, seguimiento y gestión del registro de faltas de asistencia, diseñada específicamente para ciclos formativos (adaptada al módulo de Desarrollo de Aplicaciones Web).
 
