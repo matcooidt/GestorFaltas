@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuaderno de Asistencia · Marco Iborra De Tiedra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Enlace a la hoja de estilos externa -->
+<link rel="stylesheet" href="style.css">
+<!-- Librería Chart.js local -->
+<script src="chart.min.js"></script>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div class="brand">
+        <strong>Cuaderno de Asistencia</strong>
+        <small>Marco Iborra De Tiedra</small>
+      </div>
+      <button class="hamburger" id="hamburger">☰</button>
+    </div>
+    <nav id="mainNav">
+      <button class="nav-btn active" data-view="dashboard"><span class="nav-icon">◆</span> Dashboard</button>
+      <button class="nav-btn" data-view="registro"><span class="nav-icon">✎</span> Registrar falta</button>
+      <button class="nav-btn" data-view="historial"><span class="nav-icon">☰</span> Historial</button>
+      <button class="nav-btn" data-view="horario"><span class="nav-icon">▦</span> Horario</button>
+      <button class="nav-btn" data-view="asignaturas"><span class="nav-icon">🗃</span> Por asignatura</button>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="theme-toggle" id="themeToggle">
+        <span id="themeLabel">Modo claro</span>
+        <span class="dot" id="themeDot">☀</span>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <!-- ================= DASHBOARD ================= -->
+    <section class="view active" id="view-dashboard">
+      <div class="page-head">
+        <h1>Resumen del curso</h1>
+        <p>Estado de asistencia por asignatura, calculado sobre las horas totales del curso (901 h).</p>
+      </div>
+
+      <div class="cards-row" id="statCards"></div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h2>Faltas por asignatura</h2>
+          <div class="chart-wrap"><canvas id="pieChart"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>Horas faltadas vs. límite permitido</h2>
+          <div class="chart-wrap"><canvas id="barChart"></canvas></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Progreso por asignatura</h2>
+        <div id="progressList"></div>
+        <div class="legend-note">
+          <span><i class="legend-dot" style="background:var(--green)"></i> &lt; 10% — Correcto</span>
+          <span><i class="legend-dot" style="background:var(--amber)"></i> 10%–15% — Advertencia</span>
+          <span><i class="legend-dot" style="background:var(--red)"></i> &gt; 15% — Riesgo de pérdida de evaluación continua</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= REGISTRO ================= -->
+    <section class="view" id="view-registro">
+      <div class="page-head">
+        <h1>Registrar falta</h1>
+        <p>Selecciona la asignatura, la fecha y el número de horas de falta.</p>
+      </div>
+
+      <div class="panel form-panel">
+        <form id="faltaForm">
+          <div class="field">
+            <label for="subjectSelect">Asignatura / Módulo</label>
+            <select id="subjectSelect" required></select>
+          </div>
+          <div class="row-2">
+            <div class="field">
+              <label for="dateInput">Fecha</label>
+              <input type="date" id="dateInput" required>
+            </div>
+            <div class="field">
+              <label for="hoursInput">Horas de falta</label>
+              <input type="number" id="hoursInput" min="0.5" step="0.5" placeholder="p. ej. 2" required>
+              <div class="hint">Usa la duración de las clases perdidas (admite medias horas).</div>
+            </div>
+          </div>
+          <div class="field">
+            <label for="noteInput">Motivo / observación (opcional)</label>
+            <textarea id="noteInput" placeholder="Ej. justificante médico, retraso, etc."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" id="submitBtn">+ Registrar falta</button>
+        </form>
+
+        <div class="preview-box" id="previewBox" style="display:none;">
+          <div class="row"><span>Horas faltadas tras el registro</span><span id="prevFaltas">—</span></div>
+          <div class="row"><span>Límite permitido</span><span id="prevLimite">—</span></div>
+          <div class="row"><span>Porcentaje consumido</span><span id="prevPct">—</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HISTORIAL ================= -->
+    <section class="view" id="view-historial">
+      <div class="page-head">
+        <h1>Historial de faltas</h1>
+        <p>Consulta, edita o elimina las faltas registradas.</p>
+      </div>
+
+      <div class="panel">
+        <div class="table-tools">
+          <select id="filterSelect">
+            <option value="">Todas las asignaturas</option>
+          </select>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="badge green" id="countBadge">0 registros</span>
+            <button class="btn btn-danger btn-sm" id="deleteAllBtn">Eliminar todos</button>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table id="historyTable">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Asignatura</th>
+                <th>Horas</th>
+                <th>Observación</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="emptyState" style="display:none;">
+          <div class="big">🗂️</div>
+          Aún no hay faltas registradas.
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HORARIO ================= -->
+    <section class="view" id="view-horario">
+      <div class="page-head">
+        <h1>Horario semanal</h1>
+        <p>Pasa el cursor por una asignatura para resaltarla, o haz clic para registrar una falta directamente en esa clase.</p>
+      </div>
+
+      <div class="panel">
+        <div class="schedule-grid" id="scheduleGrid"></div>
+        <div class="legend-note" style="margin-top:18px;">
+          <span><i class="legend-dot" style="background:var(--paper-2);border:1px solid var(--line);"></i> Sin clase</span>
+          <span><i class="legend-dot" style="background:var(--text-2);"></i> Tutoría / descanso (no computa faltas)</span>
+          <span>👆 Clic sobre una asignatura para registrar una falta</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= POR ASIGNATURA ================= -->
+    <section class="view" id="view-asignaturas">
+      <div class="page-head">
+        <h1>Faltas por asignatura</h1>
+        <p>Despliega una asignatura para ver, editar o eliminar sus faltas de forma más ordenada que en el historial general.</p>
+      </div>
+
+      <div id="subjectManager"></div>
+    </section>
+  </main>
+</div>
+
+<!-- Edit modal -->
+<div class="modal-backdrop" id="editBackdrop">
+  <div class="modal">
+    <h3>Editar falta</h3>
+    <div class="field">
+      <label>Asignatura / Módulo</label>
+      <select id="editSubject"></select>
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label>Fecha</label>
+        <input type="date" id="editDate">
+      </div>
+      <div class="field">
+        <label>Horas</label>
+        <input type="number" id="editHours" min="0.5" step="0.5">
+      </div>
+    </div>
+    <div class="field">
+      <label>Observación</label>
+      <textarea id="editNote"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelEdit">Cancelar</button>
+      <button class="btn btn-primary" id="saveEdit">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete confirm modal -->
+<div class="modal-backdrop" id="deleteBackdrop">
+  <div class="modal">
+    <h3 id="deleteTitle">¿Eliminar este registro?</h3>
+    <p style="color:var(--text-2);font-size:.9rem;margin:0 0 4px;" id="deleteText">Esta acción no se puede deshacer.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelDelete">Cancelar</button>
+      <button class="btn btn-danger" id="confirmDelete">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"><span class="dot"></span><span id="toastMsg"></span></div>
+
+<!-- Lógica principal de la aplicación -->
+<script src="app.js"></script>
+</body>
+</html>
