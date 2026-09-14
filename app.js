@@ -1,4 +1,83 @@
 /* =======================================================
+   SISTEMA DE AUTENTICACIÓN (Mockup)
+   ======================================================= */
+const ADMIN_PIN = "13211300";
+let isLoginMode = true;
+let currentUser = null; // Guardará el nombre del usuario logeado
+
+const authScreen = document.getElementById("authScreen");
+const appContainer = document.querySelector(".app");
+const authForm = document.getElementById("authForm");
+const toggleAuth = document.getElementById("toggleAuth");
+const authTitle = document.getElementById("authTitle");
+const authBtn = document.getElementById("authBtn");
+const pinField = document.getElementById("pinField");
+const authPin = document.getElementById("authPin");
+
+// Alternar entre Login y Registro
+toggleAuth.addEventListener("click", (e) => {
+  e.preventDefault();
+  isLoginMode = !isLoginMode;
+  
+  if (isLoginMode) {
+    authTitle.textContent = "Iniciar Sesión";
+    authBtn.textContent = "Entrar";
+    toggleAuth.textContent = "¿No tienes cuenta? Regístrate";
+    pinField.style.display = "none";
+    authPin.removeAttribute("required");
+  } else {
+    authTitle.textContent = "Crear Cuenta";
+    authBtn.textContent = "Registrarse";
+    toggleAuth.textContent = "¿Ya tienes cuenta? Inicia sesión";
+    pinField.style.display = "block";
+    authPin.setAttribute("required", "true");
+  }
+});
+
+authForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  
+  const user = document.getElementById("authUser").value.trim();
+  const pass = document.getElementById("authPass").value.trim();
+  const pin = authPin.value.trim();
+
+  if (!isLoginMode) {
+    // Modo Registro
+    if (pin !== ADMIN_PIN) {
+      alert("PIN de administrador incorrecto. No puedes registrarte.");
+      return;
+    }
+    
+    // Aquí registrarías al usuario en tu base de datos
+    // Por ahora, simulamos que se ha registrado y logeado
+    iniciarSesionApp(user);
+    alert(`Cuenta creada con éxito. ¡Bienvenido ${user}!`);
+    
+  } else {
+    // Modo Login
+    // Aquí comprobarías el usuario y contraseña contra tu base de datos
+    // Por ahora, dejamos que entre cualquier usuario para probar la UI
+    if (user === "" || pass === "") {
+      alert("Rellena los campos.");
+      return;
+    }
+    iniciarSesionApp(user);
+  }
+});
+
+function iniciarSesionApp(username) {
+  currentUser = username;
+  authScreen.classList.add("hidden");
+  appContainer.classList.add("visible");
+  
+  // Modificamos el nombre en el menú lateral para que sea dinámico
+  const brandSmall = document.querySelector(".brand small");
+  if(brandSmall) brandSmall.textContent = `Usuario: ${username}`;
+  
+  // Aquí es donde, en el futuro, cargarías los "records" desde la base de datos 
+  // usando el "currentUser" en lugar de cargarlos desde localStorage.
+}
+/* =======================================================
    DATOS BASE — extraídos de "Distribución Horaria del Curso.xlsx"
    ======================================================= */
 const SUBJECTS = [
