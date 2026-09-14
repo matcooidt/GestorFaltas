@@ -12,7 +12,38 @@
 <script src="chart.min.js"></script>
 </head>
 <body>
+<!-- Pantalla de Login / Registro -->
+<div id="authScreen" class="auth-screen">
+  <div class="auth-box panel">
+    <h2 id="authTitle" style="text-align:center; font-family:var(--serif);">Iniciar Sesión</h2>
+    
+    <form id="authForm">
+      <div class="field">
+        <label>Usuario</label>
+        <input type="text" id="authUser" required autocomplete="username">
+      </div>
+      
+      <div class="field">
+        <label>Contraseña</label>
+        <input type="password" id="authPass" required autocomplete="current-password">
+      </div>
+      <!-- Este campo solo se muestra en el registro -->
+      <div class="field" id="pinField" style="display: none;">
+        <label>Admin PIN</label>
+        <input type="password" id="authPin" placeholder="Requerido para crear cuenta">
+      </div>
 
+      <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;" id="authBtn">Entrar</button>
+    </form>
+
+    <div style="text-align:center; margin-top:16px; font-size:0.85rem;">
+      <a href="#" id="toggleAuth" style="color:var(--gold); font-weight:600; text-decoration:none;">
+        ¿No tienes cuenta? Regístrate
+      </a>
+    </div>
+  </div>
+</div>
+  
 <div class="app">
   <aside class="sidebar" id="sidebar">
     <div style="display:flex;align-items:center;justify-content:space-between;">
